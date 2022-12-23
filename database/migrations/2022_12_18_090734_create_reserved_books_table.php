@@ -1,0 +1,49 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('reserved_books', function (Blueprint $table) {
+            $table->id('id');
+            $table->unsignedBigInteger('book_id');
+            $table->unsignedBigInteger('user_id');
+            $table->string('stud_id');
+            $table->timestamp('res_date')->useCurrent();
+            $table->timestamp('due_date')->nullable();
+            $table->foreign('book_id')
+                ->references('id')
+                ->on('books')
+                ->onDelete('cascade');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
+            $table->foreign('stud_id')
+                ->references('stud_id')
+                ->on('students')
+                ->onDelete('cascade');
+
+            // $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('reserved_books');
+    }
+};
