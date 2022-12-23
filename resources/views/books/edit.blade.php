@@ -12,6 +12,7 @@
         </div>
     </div>
 
+    <!-- the edit/update book form -->
     <div class="flex justify-center px-5 py-5">
         <form action="/books/{{$book->id}}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -69,6 +70,7 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
+    <!-- end of form -->
 <!-- anyone who hasn't login and try to access this page will go to this block -->
 @else
 <div class="m-auto w-4/5 py-24">

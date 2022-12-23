@@ -14,8 +14,10 @@ class BooksController extends Controller
      */
     public function index()
     {
+        // shows all book
         $books = Book::all();
-        // dd($books);
+
+        // shows the books.index with books data
         return view('books.index', [
             'books' => $books
         ]);
@@ -39,7 +41,7 @@ class BooksController extends Controller
      */
     public function store(Request $request)
     {
-
+        // validate the input 
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'author' => ['required', 'string', 'max:255'],
@@ -52,10 +54,13 @@ class BooksController extends Controller
             'cover' => ['required'],
         ]);
 
+        // new variable to save the image in the timestamp-title.extension order
         $newImageName = time() . '-' . $request->title . '.' . $request->cover->extension();
         
+        // move/upload the image to the public/images/ folder
         $request->cover->move(public_path('images'), $newImageName);
 
+        // take the value that passed from the request
         $book = Book::create([
             'title' => $request->input('title'),
             'author' => $request->input('author'),
@@ -69,6 +74,7 @@ class BooksController extends Controller
 
         ]);
 
+        // go to the /books/index
         return redirect('/books');
     }
 
@@ -91,8 +97,10 @@ class BooksController extends Controller
      */
     public function edit($id)
     {
+         // find the book that has the id
         $book = Book::find($id)->first();
 
+        // go to the edit form with the book's data
         return view('books.edit') -> with('book', $book);
     }
 
@@ -105,6 +113,7 @@ class BooksController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // validate the input 
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'author' => ['required', 'string', 'max:255'],
@@ -117,10 +126,13 @@ class BooksController extends Controller
             'cover' => ['required'],
         ]);
 
+        // new variable to save the image in the timestamp-title.extension order
         $newImageName = time() . '-' . $request->title . '.' . $request->cover->extension();
         
+        // move/upload the image to the public/images/ folder
         $request->cover->move(public_path('images'), $newImageName);
 
+        // take the value that passed from the request
         $book = Book::where('id', $id)->update([
             'title' => $request->input('title'),
             'author' => $request->input('author'),
@@ -132,8 +144,9 @@ class BooksController extends Controller
             'genre_id' => $request->input('genre_id'),
             'cover' => $newImageName,
         ]);
-        return redirect('/books');
 
+        // go to the /books/index
+        return redirect('/books');
     }
 
     /**
@@ -144,9 +157,13 @@ class BooksController extends Controller
      */
     public function destroy($id)
     {
+        // find the book that has the id
         $book = Book::find($id)->first();
 
+        // delete the data
         $book->delete();
+        
+        // go to books/index
         return redirect('/books');
     }
 }

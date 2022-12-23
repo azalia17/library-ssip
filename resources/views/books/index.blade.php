@@ -20,7 +20,7 @@
 
             <!-- this only shows when the role of the user is admin. Admin = 3, student=1, librarian=2 -->
             @if(Auth::user()->role==3)
-            <div class="pt-10">
+            <div class="pt-13 px-24">
                 <a href="books/create" class="border=b-2 pb-2 border-dotted text-muted">
                     Add a new Book
                 </a>
@@ -31,40 +31,47 @@
                 <!-- looping to retrieve the book from database -->
                 @foreach ($books as $book)
                     <div class="m-auto">
-                        <h2 class="mt-3"><strong>{{$book -> title}}</strong></h2>
-                        <p class="text-primary"><strong>Genre: {{$book->genre}}</strong></p>
-                        <p class="text-lg text-secondary">{{$book -> synopsis}}</p>
-                        <!-- only admin cn access the edit and delete method -->
-                        @if(Auth::user()->role==3)
-                        <div class="float-right">
-                            <a href="books/{{$book->id}}/edit" class="text-success px-3">Edit</a>
-                            <form action="/books/{{$book->id}}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit"  class="btn btn-link text-danger">Delete</button>
-                            </form>
-                        </div>
-                        @endif
-
-                        <hr class="mt-4 mb-8">
-                        
+                        <div class="row">
+                            <div class="col-1"><img src="{{asset('images/'.$book->cover)}}" alt="book cover" style="width: 66px;;height: 110px;;"></div>
+                            <div class="col-10">
+                                <h2 class="mt-3"><strong>{{$book -> title}}</strong></h2>
+                                <p class="text-primary"><strong>Genre: {{$book->genre}}</strong></p>
+                                <p class="text-lg text-secondary">{{$book -> synopsis}}</p>
+                            </div>
+                            <div class="col">
+                                <!-- only admin cn access the edit and delete method -->
+                                @if(Auth::user()->role==3)
+                                <div class="float-right">
+                                    <a href="books/{{$book->id}}/edit" class="text-success px-3">Edit</a>
+                                    <form action="/books/{{$book->id}}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"  class="btn btn-link text-danger">Delete</button>
+                                    </form>
+                                </div>
+                                @endif
+                            </div>
+                        </div>                       
+                        <hr class="mt-4 mb-8">                        
                     </div>
                @endforeach
             </div>
         </div>
         <div class="col">
             <!-- the right hand menu wit its respective role. admin=3 librarian=2 student=1 -->
-            <li>
+            <ul>
                 <ol>Books</ol>
                 @if(Auth::user()->role !== 1)
                     <ol>Reservation</ol>
-                @elseif(Auth::user()->role==1)
+                @endif
+                @if(Auth::user()->role==1)
                     <ol>My Reservation</ol>
                     <ol>My Book</ol>
-                @elseif(Auth::user()->role==3)
+                @endif
+                @if(Auth::user()->role==3)
                     <ol>Register</ol>
                 @endif
-            </li>
+            </ul>
         </div>
     </div>
 </div>
